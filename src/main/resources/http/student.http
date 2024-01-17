@@ -1,0 +1,75 @@
+### Create student
+POST http://localhost:8081/student
+Content-Type: application/json
+
+{
+  "name": "Dybala",
+  "surname": "sidihjs",
+  "level": 1,
+  "age": 31,
+  "gender": "FEMALE"
+}
+
+### GetALL
+GET http://localhost:8081/student
+
+### Get by id
+GET http://localhost:8081/student/3
+
+### UPDATE BY ID
+PUT http://localhost:8081/student/3
+Content-Type: application/json
+
+
+{
+  "name": "Dybala",
+  "surname": "Paulo",
+  "level": 2,
+  "age": 31,
+  "gender": "MALE"
+
+}
+
+### delete student by id
+DELETE http://localhost:8081/student/6
+
+### search
+GET http://localhost:8081/student/search/Jr
+
+
+### search
+GET http://localhost:8081/student/search?name=Jr
+
+### GET BY NAME
+GET http://localhost:8081/student/byName?name=Leo
+
+
+### get student by surname
+GET http://localhost:8081/student/bySurname?surname=Messi
+
+### get student by level
+GET http://localhost:8081/student/byLevel?level=4
+
+### get student by age
+GET http://localhost:8081/student/byAge?age=31
+
+### get student by gender
+GET http://localhost:8081/student/byGender?gender=MALE
+
+### page student
+GET http://localhost:8081/student/by?page=3&size=3
+
+### first name
+GET http://localhost:8081/student/firstByName?name=Dybala
+
+### count name
+GET http://localhost:8081/student/countName?name=Dybala
+
+### pagination by level
+GET http://localhost:8081/student/paginatiionByLevel?page=2&size=2&level=2
+
+### pagination by gender
+GET http://localhost:8081/student/paginatiionByGender?page=1&size=3&gender=FEMALE
+
+### pagination
+GET http://localhost:8081/student/pagination2?page=1&size=2

@@ -1,0 +1,98 @@
+### Create student_course_mark
+POST http://localhost:8081/student_course_mark
+Content-Type: application/json
+
+{
+  "studentId":7,
+  "courseId": 5,
+  "mark":9
+
+}
+
+### GetALL
+GET http://localhost:8081/student_course_mark
+
+### Get by id
+GET http://localhost:8081/student_course_mark/3
+
+### UPDATE BY ID
+PUT http://localhost:8081/student_course_mark/2
+Content-Type: application/json
+
+
+{
+  "mark": 2,
+  "studentId": 2,
+  "courseId": 4
+}
+
+### delete student_course_mark by id
+DELETE http://localhost:8081/student_course_mark/6
+
+### search
+GET http://localhost:8081/student_course_mark/search/Jr
+
+
+### search
+GET http://localhost:8081/student_course_mark/search?name=Jr
+
+### GET BY NAME
+GET http://localhost:8081/student_course_mark/byName?name=Leo
+
+
+### get student_course_mark by surname
+GET http://localhost:8081/student_course_mark/bySurname?surname=Messi
+
+### get student_course_mark by level
+GET http://localhost:8081/student_course_mark/byLevel?level=4
+
+### get student_course_mark by age
+GET http://localhost:8081/student_course_mark/byAge?age=31
+
+### get student_course_mark by gender
+GET http://localhost:8081/student_course_mark/byGender?gender=MALE
+
+### get studentCourse detail
+GET http://localhost:8081/student_course_mark/getWithDetail/3
+
+### get student Mark By Course
+GET http://localhost:8081/student_course_mark/getMarkByCourse?studentId=7&courseId=1
+
+### pagination
+GET http://localhost:8081/student_course_mark/pagination?page=3&size=2
+
+### get page by studentID
+GET http://localhost:8081/student_course_mark/paginationByStudentId?page=2&size=2&studentId=7
+
+### get last mark and course
+GET http://localhost:8081/student_course_mark/getLastMarkAndCourse?studentID=7
+
+### get top 3 mark
+GET http://localhost:8081/student_course_mark/getTop3Mark?studentID=7
+
+### get first mark
+GET http://localhost:8081/student_course_mark/getFirstMarkByStudent?studentID=9
+
+### get first mark from given course
+GET http://localhost:8081/student_course_mark/getFirstMarkFromCourse?studentID=2&courseID=5
+
+### get highest mark from given course
+GET http://localhost:8081/student_course_mark/getHighestMarkFromCourse?studentID=7&courseID=5
+
+### get average mark
+GET http://localhost:8081/student_course_mark/getAverageMark?studentID=9
+
+###
+GET http://localhost:8081/student_course_mark/getAverageMarkFromCourse?studentID=2&courseID=5
+
+### get high marks than given mark
+GET http://localhost:8081/student_course_mark/getHighMarksThanGivenMark?studentID=2&mark=2
+
+### get highest mark by given course
+GET http://localhost:8081/student_course_mark/getHighMarksGivenCourse?courseID=4
+
+### get average mark by given course
+GET http://localhost:8081/student_course_mark/getAverageMarkGivenCourse?courseID=5
+
+### get count mark by given course
+GET http://localhost:8081/student_course_mark/getCountMarkByGivenCourse?courseID=5

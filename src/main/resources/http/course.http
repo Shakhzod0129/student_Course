@@ -1,0 +1,63 @@
+### Create course
+POST http://localhost:8081/course
+Content-Type: application/json
+
+{
+  "name": "Swift",
+  "price": 1500,
+  "duration": 3
+
+}
+
+### GetALL
+GET http://localhost:8081/course
+
+### Get by id
+GET http://localhost:8081/course/2
+
+### UPDATE BY ID
+PUT http://localhost:8081/course/2
+Content-Type: application/json
+
+
+{
+  "name": "Coding",
+  "price": 3000,
+  "duration": 3
+
+}
+
+### delete course by id
+DELETE http://localhost:8081/course/2
+
+### search
+GET http://localhost:8081/course/search/Jr
+
+
+### search
+GET http://localhost:8081/course/search?name=Jr
+
+### GET BY NAME
+GET http://localhost:8081/course/byName?name=Java
+
+### GET BY PRICE
+GET http://localhost:8081/course/byPrice?price=60
+
+### GET BY DURATION
+GET http://localhost:8081/course/byDuration?duration=5
+
+
+### GET BETWEEN TWO PRICES
+GET http://localhost:8081/course/byBetweenTwoPrices?price1=1000&price2=6000
+
+### pagination
+GET http://localhost:8081/course/paginatiion?page=2&size=3
+
+### pagination by created date
+GET http://localhost:8081/course/paginatiionByCreatedDate?page=2&size=2
+
+### pagination by price
+GET http://localhost:8081/course/paginatiionByPrice?page=1&size=2&price=1500
+
+### pagination by between two prices
+GET http://localhost:8081/course/paginatiionByBetweenTwoPrice?page=2&size=2&price1=1000&price2=4000
