@@ -1,15 +1,16 @@
 package com.example.student_course.service;
 
-import com.example.student_course.dto.CourseDTO;
-import com.example.student_course.dto.StudentCourseMarkDTO;
-import com.example.student_course.dto.StudentDTO;
+import com.example.student_course.dto.*;
 import com.example.student_course.entity.CourseEntity;
 import com.example.student_course.entity.StudentCourseMarkEntity;
 import com.example.student_course.entity.StudentEntity;
 import com.example.student_course.exp.AppBadException;
+import com.example.student_course.mapper.StudentCourseMapper;
 import com.example.student_course.repository.CourseRepository;
+import com.example.student_course.repository.StudentCourseMarkCustomRepository;
 import com.example.student_course.repository.StudentCourseMarkRepository;
 import com.example.student_course.repository.StudentRepository;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.Optional;
 
 @Service
@@ -33,6 +35,9 @@ public class StudentCourseMarkService {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private StudentCourseMarkCustomRepository studentCourseMarkCustomRepository;
 
 
     public StudentCourseMarkDTO create(StudentCourseMarkDTO studentCourseMarkDto) {
@@ -120,32 +125,6 @@ public class StudentCourseMarkService {
         return dto;
     }
 
-    public StudentCourseMarkDTO getWithDetail(Integer id) {
-
-        StudentCourseMarkEntity entity = get(id);
-
-        StudentCourseMarkDTO dto = new StudentCourseMarkDTO();
-        dto.setMark(entity.getMark());
-        dto.setCreatedDate(entity.getCreatedDate());
-
-        StudentEntity studentEntity = entity.getStudent();
-        StudentDTO studentDTO = new StudentDTO();
-        studentDTO.setName(studentEntity.getName());
-        studentDTO.setSurname(studentEntity.getSurname());
-        studentDTO.setId(studentEntity.getId());
-
-        CourseEntity courseEntity = entity.getCourse();
-        CourseDTO courseDTO = new CourseDTO();
-        courseDTO.setName(courseEntity.getName());
-        courseDTO.setPrice(courseEntity.getPrice());
-        courseDTO.setId(courseEntity.getId());
-
-        dto.setStudent(studentDTO);
-        dto.setCourseDTO(courseDTO);
-
-        return dto;
-
-    }
 
 
     public List<StudentCourseMarkDTO> getMarkByCourse(Integer studentId, Integer courseId) {
@@ -402,6 +381,166 @@ public class StudentCourseMarkService {
             count++;
         }
         return count;
+    }
+
+
+    public List<StudentCourseMarkDTO> getMarksByStudentId(Integer studentID) {
+        List<StudentCourseMapper> list = studentCourseMarkRepository.getAllMarksByStudentId(studentID);
+
+        List<StudentCourseMarkDTO> dtoList=new LinkedList<>();
+
+
+        for (StudentCourseMapper studentCourseMapper : list) {
+            StudentCourseMarkDTO dto=new StudentCourseMarkDTO();
+            CourseDTO courseDTO=new CourseDTO();
+
+            dto.setId(studentCourseMapper.getStudentCourseMapperId());
+            dto.setMark(studentCourseMapper.getMark());
+            dto.setCreatedDate(studentCourseMapper.getCreatedDate());
+
+            courseDTO.setId(studentCourseMapper.getCourseId());
+            courseDTO.setPrice(studentCourseMapper.getPrice());
+            courseDTO.setName(studentCourseMapper.getCName());
+
+            dto.setCourseDTO(courseDTO);
+            dtoList.add(dto);
+        }
+
+        return dtoList;
+    }
+
+    public StudentCourseMarkDTO getWithDetail(Integer id) {
+
+        StudentCourseMarkEntity entity = get(id);
+
+        StudentCourseMarkDTO dto = new StudentCourseMarkDTO();
+        dto.setMark(entity.getMark());
+        dto.setCreatedDate(entity.getCreatedDate());
+
+        StudentEntity studentEntity = entity.getStudent();
+        StudentDTO studentDTO = new StudentDTO();
+        studentDTO.setName(studentEntity.getName());
+        studentDTO.setSurname(studentEntity.getSurname());
+        studentDTO.setId(studentEntity.getId());
+
+        CourseEntity courseEntity = entity.getCourse();
+        CourseDTO courseDTO = new CourseDTO();
+        courseDTO.setName(courseEntity.getName());
+        courseDTO.setPrice(courseEntity.getPrice());
+        courseDTO.setId(courseEntity.getId());
+
+        dto.setStudent(studentDTO);
+        dto.setCourseDTO(courseDTO);
+
+        return dto;
+
+    }
+
+    public List<StudentCourseMarkDTO> getByStudentIdMarkList(Integer id) {
+        StudentCourseMarkEntity entity = get(id);
+        if (entity == null) {
+            throw new AppBadException("Student not found");
+        }
+        List<StudentCourseMapper> mapper100 = studentCourseMarkRepository.getByStudentId(id);
+        List<StudentCourseMarkDTO> resultList = new LinkedList<>();
+        for (StudentCourseMapper mapper : mapper100) {
+            StudentCourseMarkDTO dto = new StudentCourseMarkDTO();
+            CourseDTO course =new CourseDTO();
+            dto.setId(mapper.getId());
+            dto.setMark(mapper.getMark());
+            dto.setCreatedDate(mapper.getCreatedDate());
+
+            course.setId(mapper.getCourseId());
+            course.setName(mapper.getCName());
+            course.setDuration(mapper.getDuration());
+
+            dto.setCourseDTO(course);
+            resultList.add(dto);
+        }
+        return resultList;
+    }
+
+
+    public Object getByCourseIdMarkList(Integer id) {
+
+        StudentCourseMarkEntity entity=get(id);
+        if(entity==null){
+            throw new AppBadException("not found❌❌");
+        }
+        List<StudentCourseMapper> list = studentCourseMarkRepository.getByCourseId(id);
+
+        List<StudentCourseMarkDTO> dtoList=new LinkedList<>();
+
+        for (StudentCourseMapper mapper : list) {
+            StudentCourseMarkDTO dto=new StudentCourseMarkDTO();
+
+            dto.setId(mapper.getId());
+            dto.setMark(mapper.getMark());
+            dto.setCreatedDate(mapper.getCreatedDate());
+
+            StudentDTO studentDTO=new StudentDTO();
+
+            studentDTO.setId(mapper.getStudentId());
+            studentDTO.setName(mapper.getSName());
+            studentDTO.setSurname(mapper.getSurname());
+
+            dto.setStudent(studentDTO);
+
+            dtoList.add(dto);
+        }
+
+        return dtoList;
+
+
+
+
+    }
+
+    public List<StudentCourseMarkDTO> getAllMarkList() {
+
+        List<StudentCourseMapper> allMark = studentCourseMarkRepository.getAllMark();
+
+        List<StudentCourseMarkDTO> dtoList=new LinkedList<>();
+
+        for (StudentCourseMapper mapper : allMark) {
+            StudentCourseMarkDTO dto=new StudentCourseMarkDTO();
+            StudentDTO studentDTO=new StudentDTO();
+            CourseDTO courseDTO=new CourseDTO();
+
+            dto.setId(mapper.getId());
+            dto.setMark(mapper.getMark());
+            dto.setCreatedDate(mapper.getCreatedDate());
+
+            studentDTO.setName(mapper.getSName());
+            studentDTO.setSurname(mapper.getSurname());
+            studentDTO.setId(mapper.getStudentId());
+
+            courseDTO.setId(mapper.getCourseId());
+            courseDTO.setName(mapper.getCName());
+            courseDTO.setPrice(mapper.getPrice());
+
+            dto.setStudent(studentDTO);
+            dto.setCourseDTO(courseDTO);
+
+            dtoList.add(dto);
+        }
+
+        return dtoList;
+    }
+
+    public PageImpl<StudentCourseMarkDTO> filter(StudentCourseMarkFilterDto dto, Integer page, Integer size) {
+
+        Pageable pageable=PageRequest.of(page-1, size);
+        PaginationResultDTO<StudentCourseMarkEntity> list = studentCourseMarkCustomRepository.filter(dto, page, size);
+
+        List<StudentCourseMarkDTO> dtoList=new LinkedList<>();
+        Long totalSize = list.getTotalSize();
+
+        for (StudentCourseMarkEntity entity : list.getList()) {
+            dtoList.add(toDto(entity));
+        }
+        return new PageImpl<>(dtoList,pageable,totalSize);
+
     }
 }
 

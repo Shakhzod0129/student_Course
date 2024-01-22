@@ -3,9 +3,10 @@ POST http://localhost:8081/student_course_mark
 Content-Type: application/json
 
 {
-  "studentId":7,
+  "studentId":9,
   "courseId": 5,
-  "mark":9
+  "mark":99,
+
 
 }
 
@@ -21,8 +22,8 @@ Content-Type: application/json
 
 
 {
-  "mark": 2,
-  "studentId": 2,
+  "mark": 55,
+  "studentId": 9,
   "courseId": 4
 }
 
@@ -62,7 +63,7 @@ GET http://localhost:8081/student_course_mark/getMarkByCourse?studentId=7&course
 GET http://localhost:8081/student_course_mark/pagination?page=3&size=2
 
 ### get page by studentID
-GET http://localhost:8081/student_course_mark/paginationByStudentId?page=2&size=2&studentId=7
+GET http://localhost:8081/student_course_mark/paginationByStudentId?page=2&size=2&studentId=9
 
 ### get last mark and course
 GET http://localhost:8081/student_course_mark/getLastMarkAndCourse?studentID=7
@@ -96,3 +97,26 @@ GET http://localhost:8081/student_course_mark/getAverageMarkGivenCourse?courseID
 
 ### get count mark by given course
 GET http://localhost:8081/student_course_mark/getCountMarkByGivenCourse?courseID=5
+
+### get marks by student id
+GET http://localhost:8081/student_course_mark/getMarksByStudentId?studentID=9
+
+### get marks by student id
+GET http://localhost:8081/student_course_mark/25?studentId=9
+
+###  get marks by course id
+GET http://localhost:8081/student_course_mark/26?courseId=3
+
+### get detail
+GET http://localhost:8081/student_course_mark/27
+
+### filter
+POST http://localhost:8081/student_course_mark/filter
+Content-Type: application/json
+
+{
+  "mark":99
+
+}
+
+

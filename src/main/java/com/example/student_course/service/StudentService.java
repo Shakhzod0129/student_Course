@@ -2,9 +2,12 @@ package com.example.student_course.service;
 
 import com.example.student_course.dto.PaginationResultDTO;
 import com.example.student_course.dto.StudentDTO;
+import com.example.student_course.dto.StudentFilterDto;
 import com.example.student_course.entity.StudentEntity;
 import com.example.student_course.enums.Gender;
 import com.example.student_course.exp.AppBadException;
+import com.example.student_course.mapper.StudentMapper;
+import com.example.student_course.repository.StudentCustomRepository;
 import com.example.student_course.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -21,6 +24,8 @@ import java.util.Optional;
 public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private StudentCustomRepository studentCustomRepository;
 
     public StudentDTO create(StudentDTO dto) {
         StudentEntity entity = new StudentEntity();
@@ -332,6 +337,21 @@ public class StudentService {
         return null;
     }
 
+    public StudentDTO findById(Integer studentID) {
+        Optional<StudentEntity> byId = studentRepository.findByStudentId(studentID);
+
+        if(byId.isEmpty()){
+            throw new AppBadException("Student not found");
+        }
+
+
+        StudentEntity studentEntity = byId.get();
+        StudentDTO dto = toDto(studentEntity);
+
+        return dto;
+
+    }
+
 //    public void testCustomQuery(String name){
 //        studentRepository.findbyName1(name);
 //    }
@@ -339,4 +359,42 @@ public class StudentService {
 //    public void test(){
 //        studentRepository.findByNameWithSort("ali", "aliyev", Sort.by(Sort.Direction.DESC, "age"));
 //    }
+
+    public void test(){
+//        List<Object[]> objectList = studentRepository.getShortInfo();
+//        List<StudentDTO> dtoList = new LinkedList<>();
+//        for (Object[] obj : objectList) {
+//            StudentDTO dto = new StudentDTO();
+//            dto.setId((Integer) obj[0]);
+//            dto.setName((String) obj[1]);
+//            dto.setSurname((String) obj[2]);
+//            dtoList.add(dto);
+//        }
+
+        List<StudentMapper> studentMappers = studentRepository.joinExample12();
+
+
+    }
+
+    public boolean update2 (Integer id, StudentDTO dto){
+        int i = studentRepository.updateStudent(dto.getName(), dto.getSurname(), id);
+
+        return true;
+    }
+
+
+    public PageImpl<StudentDTO> filter (StudentFilterDto filterDto, Integer page, Integer size){
+
+
+        Pageable pageable=PageRequest.of(page, size);
+        PaginationResultDTO<StudentEntity> entityList =
+                studentCustomRepository.filter2(filterDto, page, size);
+        List<StudentDTO>  dtoList=new LinkedList<>();
+        for (StudentEntity studentEntity : entityList.getList()) {
+            dtoList.add(toDto(studentEntity));
+        }
+
+        return new PageImpl<>(dtoList, pageable, entityList.getTotalSize());
+
+    }
 }

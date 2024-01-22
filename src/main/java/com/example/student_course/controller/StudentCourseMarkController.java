@@ -1,13 +1,12 @@
 package com.example.student_course.controller;
 
-import com.example.student_course.dto.CourseDTO;
 import com.example.student_course.dto.StudentCourseMarkDTO;
+import com.example.student_course.dto.StudentCourseMarkFilterDto;
 import com.example.student_course.dto.StudentDTO;
+import com.example.student_course.dto.StudentFilterDto;
 import com.example.student_course.service.StudentCourseMarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -129,6 +128,35 @@ public class StudentCourseMarkController {
     @GetMapping("/getCountMarkByGivenCourse")
     public ResponseEntity<Integer> getCountMarkByGivenCourse(@RequestParam Integer courseID){
         return ResponseEntity.ok(studentCourseMarkService.getCountMarkByGivenCourse(courseID));
+    }
+
+    @GetMapping("/getMarksByStudentId")
+    public ResponseEntity<?> getMarksByStudentId(@RequestParam Integer studentID){
+        return ResponseEntity.ok(studentCourseMarkService.getMarksByStudentId(studentID));
+    }
+
+    @GetMapping("/25")
+    public ResponseEntity<?>getByStudentIdMarkList(@RequestParam("studentId")Integer id){
+        return ResponseEntity.ok(studentCourseMarkService.getByStudentIdMarkList(id));
+    }
+
+    @GetMapping("/26")
+    public ResponseEntity<?>getByCourseIdMarkList(@RequestParam("courseId")Integer id){
+        return ResponseEntity.ok(studentCourseMarkService.getByCourseIdMarkList(id));
+    }
+
+    @GetMapping("/27")
+    public ResponseEntity<List<StudentCourseMarkDTO>>getAllMarkList(){
+        return ResponseEntity.ok(studentCourseMarkService.getAllMarkList());
+    }
+
+
+    @PostMapping("/filter")
+    public ResponseEntity<PageImpl<StudentCourseMarkDTO>> create(@RequestBody StudentCourseMarkFilterDto dto,
+                                                       @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        PageImpl<StudentCourseMarkDTO> result = studentCourseMarkService.filter(dto, page, size);
+        return ResponseEntity.ok(result);
     }
 
 

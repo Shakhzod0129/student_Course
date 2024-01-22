@@ -61,3 +61,13 @@ GET http://localhost:8081/course/paginatiionByPrice?page=1&size=2&price=1500
 
 ### pagination by between two prices
 GET http://localhost:8081/course/paginatiionByBetweenTwoPrice?page=2&size=2&price1=1000&price2=4000
+
+### filter
+POST http://localhost:8081/course/filter
+Content-Type: application/json
+
+{
+
+  "price": 6000
+
+}

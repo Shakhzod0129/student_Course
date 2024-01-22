@@ -3,6 +3,7 @@ package com.example.student_course.controller;
 
 import com.example.student_course.dto.PaginationResultDTO;
 import com.example.student_course.dto.StudentDTO;
+import com.example.student_course.dto.StudentFilterDto;
 import com.example.student_course.enums.Gender;
 import com.example.student_course.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +130,24 @@ public class StudentController {
 //    public ResponseEntity<List<StudentDTO>> getAllByWithSort(){
 //        return ResponseEntity.of(studentService.getAllByWithSort());
 //    }
+
+
+    @GetMapping("findById/{id}")
+    public ResponseEntity<StudentDTO> findById(@PathVariable Integer id){
+        return ResponseEntity.ok(studentService.findById(id));
+    }
+
+
+    @PostMapping("/filter")
+    public ResponseEntity<PageImpl<StudentDTO>> create(@RequestBody StudentFilterDto dto,
+                                                       @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        PageImpl<StudentDTO> result = studentService.filter(dto, page, size);
+        return ResponseEntity.ok(result);
+    }
+
+
+
 
 
 

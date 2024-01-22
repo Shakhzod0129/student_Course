@@ -1,9 +1,12 @@
 package com.example.student_course.service;
 
 import com.example.student_course.dto.CourseDTO;
+import com.example.student_course.dto.CourseFilterDto;
+import com.example.student_course.dto.PaginationResultDTO;
 import com.example.student_course.dto.StudentDTO;
 import com.example.student_course.entity.CourseEntity;
 import com.example.student_course.exp.AppBadException;
+import com.example.student_course.repository.CourseCustomRepository;
 import com.example.student_course.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -18,6 +21,8 @@ import java.util.Optional;
 public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private CourseCustomRepository courseCustomRepository;
     public CourseDTO create(CourseDTO dto) {
         CourseEntity entity=new CourseEntity();
         entity.setName(dto.getName());
@@ -238,5 +243,19 @@ public class CourseService {
         }
 
         return new PageImpl<>(dtoList,pageable,totalPages);
+    }
+
+    public PageImpl<CourseDTO> filter(CourseFilterDto dto, Integer page, Integer size) {
+        Pageable pageable=PageRequest.of(page-1,size);
+        PaginationResultDTO<CourseEntity> list = courseCustomRepository.filter(dto, page, size);
+
+        Long totalSize = list.getTotalSize();
+        List<CourseDTO> dtoList=new LinkedList<>();
+
+        for (CourseEntity courseEntity : list.getList()) {
+            dtoList.add(toDto(courseEntity));
+        }
+
+        return new PageImpl<>(dtoList,pageable,totalSize);
     }
 }

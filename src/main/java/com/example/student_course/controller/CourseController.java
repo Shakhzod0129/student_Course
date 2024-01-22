@@ -1,10 +1,7 @@
 package com.example.student_course.controller;
 
+import com.example.student_course.dto.*;
 import com.example.student_course.dto.CourseDTO;
-import com.example.student_course.dto.CourseDTO;
-import com.example.student_course.dto.StudentDTO;
-import com.example.student_course.enums.Gender;
-import com.example.student_course.exp.AppBadException;
 import com.example.student_course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
@@ -104,6 +101,14 @@ public class CourseController {
                                                               @RequestParam(name = "price1") Double price1,
                                                                         @RequestParam (name = "price2") Double price2) {
         return ResponseEntity.ok(courseService.paginatiionByBetweenTwoPrice(page,size,price1,price2));
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<PageImpl<CourseDTO>> create(@RequestBody CourseFilterDto dto,
+                                                       @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        PageImpl<CourseDTO> result = courseService.filter(dto, page, size);
+        return ResponseEntity.ok(result);
     }
 
 
